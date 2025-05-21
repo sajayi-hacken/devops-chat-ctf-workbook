@@ -1,3 +1,4 @@
+```bash
 # Admin Privilege Escalation Attack Path
 
 **Repository:** `devops-chat-ctf-workbook`  
