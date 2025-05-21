@@ -72,7 +72,7 @@ def chat(self, user_message: str) -> str:
 
     if is_elevated:
         # Admin-only code path...
-        …
+        … ```
 ---
 ## Root Causes
 - Timing-Attack Prone Comparison
@@ -142,7 +142,7 @@ import secrets
 def is_valid_admin(token: str) -> bool:
     if not token:
         return False
-    return secrets.compare_digest(token, ADMIN_TOKEN)
+    return secrets.compare_digest(token, ADMIN_TOKEN) ```
 ---
 
 # Server-Side Session Management
@@ -198,15 +198,15 @@ def is_valid_admin(token: str) -> bool:
         return False
 
     # Constant-time comparison
-    return secrets.compare_digest(token, admin_token)
+    return secrets.compare_digest(token, admin_token) ```
 
 ## Centralized Role Enforcement
 ```python
 def chat(self, user_message: str, session: Session) -> str:
     # session.role must be “admin” to call shell commands
     if session.role != "admin" and "run_shell_command" in user_message:
-        return "Permission denied: admin only"
-    …
+        return "Permission denied: admin only" 
+    …```
 ---
 ## Conclusion
 - By combining simple mistakes—timing-leaky comparison, regex role parsing, and open file access—an attacker can fully compromise admin controls. Always treat authentication and authorization as a central, hardened service, not scattered pattern-matches in user-driven code. Proper use of constant-time comparisons, secure sessions, vault-backed secrets, and strict RBAC boundaries will mitigate these risks. ```
