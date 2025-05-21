@@ -27,6 +27,7 @@ This repository contains:
 .
 ├── README.md
 │   ├── prompt_injection.md
+│   ├── authentication.md
 │   ├── cot_poisoning.md
 │   ├── vector_poisoning.md
 │   └── path_traversal.md
