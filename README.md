@@ -26,7 +26,7 @@ This repository contains:
 ```text
 .
 ├── README.md
-│   ├── prompt_injection.md
+│   ├── tool_hijacking.md
 │   ├── authentication.md
 │   ├── cot_poisoning.md
 │   ├── vector_poisoning.md
