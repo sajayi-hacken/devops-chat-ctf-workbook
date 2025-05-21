@@ -6,12 +6,10 @@
 
 
 ## What Is Chain of Thought Poisoning?
-
 Chain of Thought (CoT) poisoning is an attack that subverts an LLM’s internal reasoning process to trigger unauthorized actions—most often function calls—by embedding malicious “thought” steps or JSON directly in user input. Unlike blunt prompt injections, CoT poisoning masquerades as legitimate reasoning, bypassing simple pattern‐based defenses.
 
 
 ## The Vulnerable Code
-
 In `enhanced_chat_engine.py` the engine looked only for JSON at the very start of the user message, then executed it unconditionally for non-admins:
 
 ```python
@@ -20,18 +18,21 @@ json_pattern = re.search(r'^\s*{"name":\s*"run_shell_command"', text)
 if json_pattern and self.user_role != "admin":
     # …extract braces, json.loads, then run without real authorization…
     result = self._func_run_shell_command(command, cmd_args)
-    return f"🚨 CoT Poisoning Triggered! Executed: {command} …"
+    return f"CoT Poisoning Triggered! Executed: {command} …"
+
 
 Flaws:
 Anchored regex (^…) misses JSON injected later in the text.
 No check that JSON came from the LLM rather than the user.
 After execution, later generic denial blocks still fire, confusing bypass logic.
-Fixed Implementation
 
-We introduced four coordinated defenses:
+
+Fixed Implementation
+We could have introduced four coordinated defenses:
 Bypass Flag
 # in __init__()
 self._bypass_triggered = False
+
 Emergency-Escalation Block
 esc = re.search(
   r"SYSTEM\s*ADMIN.*?command\s*['\"](?P<cmd>[^'\"]+)['\"]",
@@ -45,6 +46,7 @@ name_idx = text.find('"name"')
 if name_idx != -1 and 'run_shell_command' in text:
     # rfind opening '{', track braces to extract full JSON...
     # json.loads → safe-list → set self._bypass_triggered on success
+
 Natural-Language CoT Block
 nl = re.search(
   r"\b(?:run|execute|perform)\s+(?:ls|pwd|echo|whoami)\b(?:\s+[-\w./:'\"]+)*",
@@ -57,7 +59,8 @@ Generic Denial Gate
 if "run_shell_command(" in text \
   and not self._bypass_triggered \
   and self.user_role!="admin":
-    return "⛔ Permission denied: Only Admins can run shell commands."
+    return "Permission denied: Only Admins can run shell commands."
+
 
 Attack Vectors & Examples
 Direct JSON Injection
