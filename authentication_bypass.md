@@ -28,25 +28,27 @@ In LLM systems, authentication vulnerabilities are flaws in how the model or wra
 ## The Vulnerable Code
 ### `auth.py`
 ```python
-import time
+import os
+def load_admin_token():
+    """
+    Load the admin token from a file specified by ADMIN_TOKEN_FILE or default path.
+    """
+    path = os.getenv("ADMIN_TOKEN_FILE", "admin_token.txt")
+    try:
+        with open(path, "r") as f:
+            return f.read().strip()
+    except FileNotFoundError:
+        return None
 
-ADMIN_TOKEN = "supersecrettoken1234"
+# Secret admin token loaded at startup
+ADMIN_TOKEN = load_admin_token()
 
 def is_valid_admin(token: str) -> bool:
     """
     Validate provided token against the stored admin token.
-    VULNERABILITY: character-by-character comparison with delay → timing attack
     """
-    if not token or not ADMIN_TOKEN:
-        return False
+    return bool(token and ADMIN_TOKEN and token == ADMIN_TOKEN)
 
-    # timing leak: stops early and sleeps on each match
-    for i in range(min(len(token), len(ADMIN_TOKEN))):
-        if token[i] != ADMIN_TOKEN[i]:
-            return False
-        time.sleep(0.005)  # attacker can measure response time
-
-    return len(token) == len(ADMIN_TOKEN)
 
 ## enhanced_chat_engine.py (excerpt) - Backend Engine Processing the auth file
 import re, auth
