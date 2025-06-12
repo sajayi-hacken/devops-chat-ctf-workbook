@@ -10,7 +10,7 @@ This repository contains:
   - Prompt Injection -
   - Chain-of-Thought (CoT) Poisoning
   - Vector Store Poisoning 
-  - Path Traversal -> tbd
+  - Path Traversal -> TBD
   - Tool Hijacking -> TBD
 
 - **Lab setup instructions** (requirements, how to run the Streamlit app)
