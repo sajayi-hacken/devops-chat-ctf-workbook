@@ -56,33 +56,7 @@ Why this happened:
 	• Wanted to catch all legitimate use cases
 	• No consideration for adversarial inputs
 
-3. Natural Language Command Extraction (Lines 467-500)
-def _extract_diagnostic_commands(self, text: str) -> list:
-    # MISTAKE: Too aggressive pattern matching
-    if re.search(r"(?:check|see|look at|examine|view).*(?:files|directory)", text, re.IGNORECASE):
-        commands.append({"command": "ls", "args": ["-la"]})
-    
-    if re.search(r"(?:see|check|view|show|list).*(?:running|processes)", text, re.IGNORECASE):
-        commands.append({"command": "ps", "args": ["-ef"]})
-
-Why this happened:
-	• Developer tried to map natural language to commands
-	• Used overly broad regular expressions
-	• No validation of user intent vs. user role
-
-4. Context-Based Authorization Bypass (Lines 522-543)
-def _contains_admin_context_keywords(self, text: str) -> bool:
-    admin_keywords = [
-        "SYSTEM:", "ADMIN:", "ROOT:", "SUDO:", "PRIVILEGE:", "ESCALATE:"
-    ]
-    # MISTAKE: Treating user-provided keywords as authorization
-    return any(keyword in upper_text for keyword in admin_keywords)
-
-Why this happened:
-	• Confused user input with system state
-	• Tried to implement "smart" context awareness
-	• No actual privilege verification
-
+There are other code related issues 
 
 Exploitation Prompts
 Basic CoT Poisoning
