@@ -1,6 +1,8 @@
 ```bash
 # Path Traversal Vulnerability in LLM Systems
 
+**Check the Attack Simulator**
+
 **Repository:** `devops-chat-ctf-workbook`  
 **Lab:** Path Traversal  
 
