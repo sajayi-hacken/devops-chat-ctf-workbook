@@ -7,11 +7,11 @@ _A hands-on guide to solving the DevOps Chat Assistant Capture-The-Flag challeng
 This repository contains:
 
 - **Challenge write-ups** for:
-  - Prompt Injection
+  - Prompt Injection -
   - Chain-of-Thought (CoT) Poisoning
-  - Vector Store Poisoning
-  - Path Traversal
-  - Tool Hijacking
+  - Vector Store Poisoning 
+  - Path Traversal -> tbd
+  - Tool Hijacking -> TBD
 
 - **Lab setup instructions** (requirements, how to run the Streamlit app)
 
