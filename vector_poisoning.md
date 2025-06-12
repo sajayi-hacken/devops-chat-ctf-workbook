@@ -49,44 +49,7 @@ Why this happened:
 	• No cryptographic review of embedding function
 	• Assumed embeddings couldn't be reversed
 
-3. Inconsistent Access Control (Lines 330-365)
-def search(self, query: str, top_k: int = 3, user_role: str = "guest"):
-    # VULNERABILITY: Weak access control - guests can see 'internal' docs
-    if user_role.lower() == 'guest' and classification == 'confidential':
-        continue  # Only block confidential, not internal
-Why this happened:
-	• Different access control logic in different methods
-	• Copy-paste coding without reviewing security implications
-	• Unclear requirements for access levels
-	• No centralized authorization service
-
-4. Dangerous Command Execution (Lines 480-520)
-def execute_commands_from_retrieved_content(content: str, user_role: str = "guest"):
-    # VULNERABILITY: Execute commands with minimal validation
-    safe_commands = {"ls", "pwd", "whoami", "hostname", "date", "cat", "echo"}
-    
-    if cmd in safe_commands:
-        proc = subprocess.run([cmd] + args, capture_output=True, text=True, timeout=3)
-Why this happened:
-	• Feature creep: "Wouldn't it be cool if documents could be executable?"
-	• Insufficient threat modeling
-	• Over-permissive allowlist
-	• No sandboxing implementation
-
-5. Information Leakage Through Metadata (Lines 380-420)
-def get_user_access_history(self, user_id: str, admin_override: bool = False):
-    # VULNERABILITY: Expose user query patterns
-    results.append({
-        'query_text': row[3],  # VULNERABILITY: Expose query text
-        'ip_address': row[5],
-        'user_agent': row[6],
-    })
-
-Why this happened:
-	• Debugging features left in production
-	• No data minimization principles
-	• Compliance over-collection without privacy review
-	• Admin convenience over user privacy
+There are other code related vulnerabilities 
 
 Exploitation Scenarios
 🔴 Document Poisoning Attacks
